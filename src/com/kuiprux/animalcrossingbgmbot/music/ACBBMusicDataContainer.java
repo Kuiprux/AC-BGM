@@ -1,14 +1,17 @@
 package com.kuiprux.animalcrossingbgmbot.music;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
+import com.kuiprux.animalcrossingbgmbot.GoogleCloudHandler;
 
 public class ACBBMusicDataContainer {
 	
@@ -17,8 +20,63 @@ public class ACBBMusicDataContainer {
 
 	public static Map<String, ACBBMusicData> musicDataMap = new HashMap<>();
 	
-	private static void loadMusic(String name) {
+	public static void loadBgmMusic(String titleName, String weatherName, int currentHour) {
+		loadMusic(GoogleCloudHandler.getBgmFileName(titleName, weatherName, currentHour));
+	}
+
+	public static boolean isMusicLoaded(String name) {
+		System.out.println("ismusicloaded: " + name);
+		return musicDataMap.get(name) != null;
+	}
+
+	public static void loadMusic(String name) {
+		String actualName = GoogleCloudHandler.getActualName(name);
+		loadMusic(actualName, GoogleCloudHandler.getFileWithName(actualName));
+	}
+
+
+	public static void loadMusic(String name, byte[] rawData) {
+		try {
+			AudioInputStream in = AudioSystem.getAudioInputStream(new ByteArrayInputStream(rawData));
+			AudioInputStream din = AudioSystem.getAudioInputStream(AUDIO_FORMAT, in);
+			byte[] convData = din.readAllBytes();
+
+			String[] names = name.replaceAll(EXTENSION_REGEX, "").split("_");
+			System.out.println(names[0]);
+			if(names.length > 2) {
+				try {
+					musicDataMap.put(names[0], new ACBBMusicData(convData, Integer.parseInt(names[1]), Integer.parseInt(names[2])));
+					//System.out.println(name[0] + ": " + name[1] + "/" + name[2]);
+				} catch(NumberFormatException e) {
+					System.err.println("Error reading music loop data. Loading only music data...");
+					musicDataMap.put(names[0], new ACBBMusicData(convData));
+				}
+			} else {
+				musicDataMap.put(names[0], new ACBBMusicData(convData));
+			}
+		} catch(UnsupportedAudioFileException e1) {
+			System.err.println(name + " could not be read as a music file.");
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void loadMusics(String prefix) {
+		List<String> names = GoogleCloudHandler.getActualNames(prefix);
+		
+		for(String name : names) {
+			loadMusic(name, GoogleCloudHandler.getFileWithName(name));
+		}
+	}
+	
+	
+	/*
+	public static void loadMusic(String name) {
 		loadMusic(new File(name));
+	}
+	
+	public static void unloadMusic(String name) {
+		musicDataMap.remove(name);
 	}
 
 	private static void loadMusic(File file) {
@@ -57,6 +115,6 @@ public class ACBBMusicDataContainer {
 		loadMusic("C:\\Users\\user\\Desktop\\testmusic.wav");
 		loadMusic("musics");
 		//loadMusic("musics\\backgrounds\\temp");
-	}
+	}*/
 
 }

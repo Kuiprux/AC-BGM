@@ -24,7 +24,7 @@ public class AllGuildMusicHandler {
 		GuildMusicManager musicManager = musicManagers.get(guildId);
 
 		if (musicManager == null) {
-			musicManager = new GuildMusicManager();
+			musicManager = new GuildMusicManager(guild);
 			musicManagers.put(guildId, musicManager);
 		}
 

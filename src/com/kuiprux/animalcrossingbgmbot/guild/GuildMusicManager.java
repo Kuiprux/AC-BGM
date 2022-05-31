@@ -3,19 +3,24 @@ package com.kuiprux.animalcrossingbgmbot.guild;
 import com.kuiprux.animalcrossingbgmbot.music.ACBBAudioSendHandler;
 import com.kuiprux.animalcrossingbgmbot.music.ACBBChannel;
 import com.kuiprux.animalcrossingbgmbot.music.ACBBMixer;
-import com.kuiprux.animalcrossingbgmbot.music.selection.ACBBMusicSelectionManager;
+import com.kuiprux.animalcrossingbgmbot.updater.GuildDataApplier;
+
+import net.dv8tion.jda.api.entities.Guild;
 
 /**
  * Holder for both the player and a track scheduler for one guild.
  */
 public class GuildMusicManager {
 	
+	Guild guild;
 	ACBBMixer mixer = new ACBBMixer();
 	ACBBAudioSendHandler audioSendHandler = new ACBBAudioSendHandler(mixer);
-	public ACBBMusicSelectionManager musicSelectionManager = new ACBBMusicSelectionManager(mixer); //TODO public test
+	public GuildDataApplier guildDataApplier; //TODO public test
 	
-	public GuildMusicManager() {
+	public GuildMusicManager(Guild guild) {
+		this.guild = guild;
 		mixer.acbbChannelList.add(new ACBBChannel());
+		guildDataApplier = new GuildDataApplier(guild, mixer);
 	}
 	
 	public boolean isPlaying() {
@@ -23,11 +28,11 @@ public class GuildMusicManager {
 	}
 	
 	public void play() {
-		musicSelectionManager.play();
+		guildDataApplier.play();
 	}
 	
 	public void stop() {
-		musicSelectionManager.stop();
+		guildDataApplier.stop();
 	}
 
 	/**
@@ -42,19 +47,19 @@ public class GuildMusicManager {
 	}
 	
 	public boolean setCity(String city) {
-		return musicSelectionManager.setCity(city);
+		return guildDataApplier.setCity(city);
 	}
 	
 	public boolean setLatLon(String lat, String lon) {
-		return musicSelectionManager.setLatLon(lat, lon);
+		return guildDataApplier.setLatLon(lat, lon);
 	}
 	
 	public void setBellPattern(int[] bellPattern) {
-		musicSelectionManager.setBellPattern(bellPattern);
+		guildDataApplier.setBellPattern(bellPattern);
 	}
 	
-	public ACBBMusicSelectionManager getMusicSelectionManager() {
-		return musicSelectionManager;
+	public GuildDataApplier getGuildDataApplier() {
+		return guildDataApplier;
 	}
 
 }

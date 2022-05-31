@@ -16,12 +16,31 @@ public class Util {
 	public static final int SAMPLE_SIZE_IN_A_MILLIS = 48;
 	public static final int BYTE_IN_A_MILLIS = AUDIO_CHANNEL*BYTE_IN_A_FRAME*SAMPLE_SIZE_IN_A_MILLIS;
 	public static final int BYTE_IN_TWENTY_MILLIS = BYTE_IN_A_MILLIS*20;
-	
+
 	public static final int[] DEFAULT_BELL_PATTERN = new int[] 
-					{2, 2, 14, -1,
-					9, -1, -1, 8,
-					-1, 7, -1, 5,
-					-1, 2, 5, 7};
+					{4, 7, 12, 16,
+					14, 11, 7, 5,
+					4, -1, 10, -1,
+					12, -1, -1, -1};
+	public static final int[] SANS_BELL_PATTERN = new int[] 
+			{2, 2, 14, -1,
+			9, -1, -1, 8,
+			-1, 7, -1, 5,
+			-1, 2, 5, 7};
+	
+	public static final String CHANNEL_NAME = "animal-crossing";
+	public static final String BACKGROUND_PATH = "images/testbackground.png";
+	public static final String PRESSURE_PATH = "images/pressure.png";
+	public static final String CLOUD_PATH = "images/cloud.png";
+	public static final String ARROW_PATH = "images/arrow.png";
+	public static final String RAIN_PATH = "images/rain.png";
+	public static final String SNOW_PATH = "images/snow.png";
+	public static final String SIGHT_PATH = "images/sight.png";
+	public static final String TEST_PATH = "images/testicon.png";
+	public static final int FRAME_GAP = 10;
+	public static final int ICON_GAP = 10;
+	public static final int ICON_SIZE = 20;
+	public static final int TEXT_OFFSET = -2;
 	
 /*
 	public static void mergeMusicBytes(ByteBuffer[] data, int interval, ByteBuffer dst) {
@@ -127,6 +146,9 @@ public class Util {
 			}
 		}
 	}
+
+	
+
 	
 	
 }

@@ -11,18 +11,19 @@ import net.dv8tion.jda.api.entities.Activity;
 
 public class AnimalCrossingBGMBot {
 	public static JDA JDA_INSTANCE;
-	public static final ACBBCommandHandler COMMAND_HANDLER = new ACBBCommandHandler();
+	public static final ACBBEventHandler EVENT_HANDLER = new ACBBEventHandler();
 	public static final AllGuildMusicHandler ALL_GUILD_MUSIC_MANAGER = new AllGuildMusicHandler();
 
 	public static void main(String[] args) throws LoginException {
+		GoogleCloudHandler.init(args[2], args[3], args[4]);
 		Util.APP_ID = args[1];
-		System.out.println("Loading Musics...");
-		ACBBMusicDataContainer.loadMusics();
-		System.out.println("Done.");
+		
+		ACBBMusicDataContainer.loadMusics("weather-sound/");
+		ACBBMusicDataContainer.loadMusics("city-folk/bell/");
 		
 	    JDABuilder builder = JDABuilder.createDefault(args[0]);
 	    builder.setActivity(Activity.playing("ACNH"));
-	    builder.addEventListeners(COMMAND_HANDLER);
+	    builder.addEventListeners(EVENT_HANDLER);
 	    JDA_INSTANCE = builder.build();
 	}
 }

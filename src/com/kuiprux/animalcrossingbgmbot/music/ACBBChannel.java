@@ -68,6 +68,7 @@ public class ACBBChannel {
 						audio.changeVolume(cv);
 					}
 				} else {
+					System.out.println("channel: " + targetChannelName);
 					currentAudioMap.get(targetChannelName).changeVolume(cv);
 				}
 				audioCommandList.removeFirst();
@@ -122,6 +123,11 @@ public class ACBBChannel {
 	}
 	
 	public void addCommand(AudioCommand cmd) {
+		if(cmd instanceof CommandPlay) {
+			if(!ACBBMusicDataContainer.isMusicLoaded(((CommandPlay) cmd).getName())) {
+				ACBBMusicDataContainer.loadMusic(((CommandPlay) cmd).getName());
+			}
+		}
 		audioCommandList.add(cmd);
 	}
 	
