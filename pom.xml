@@ -36,6 +36,16 @@
 					</archive>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>3.0.3</version>
+				<configuration>
+					<processTypes>
+						<worker>java -jar animal-crossing-bgm-bot-0.0.1-shaded.jar</worker>
+					</processTypes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<repositories>

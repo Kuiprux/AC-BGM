@@ -1,38 +1,25 @@
 package com.kuiprux.animalcrossingbgmbot;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import com.google.common.collect.Lists;
 
 public class GoogleCloudHandler {
 
 	public static String PROJECT_ID;
 	public static String BUCKET_NAME;
 
-	private static GoogleCredentials credentials;
-
 	private static Storage storage;
 
-	public static void init(String projectId, String bucketName, String credPath) {
+	public static void init(String projectId, String bucketName/*, String credPath*/) {
 		PROJECT_ID = projectId;
 		BUCKET_NAME = bucketName;
-		try {
-			credentials = GoogleCredentials
-					.fromStream(new FileInputStream(credPath))
-					.createScoped(Lists.newArrayList("https://www.googleapis.com/auth/cloud-platform"));
-			storage = StorageOptions.newBuilder().setCredentials(credentials).setProjectId(PROJECT_ID).build()
-					.getService();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		storage = StorageOptions.getDefaultInstance().getService();
 	}
 	
 	public static String getActualName(String name) {
