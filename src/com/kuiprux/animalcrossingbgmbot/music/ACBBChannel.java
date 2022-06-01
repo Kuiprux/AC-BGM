@@ -44,10 +44,15 @@ public class ACBBChannel {
 				continue;
 			} else if(cmd instanceof CommandStop) {
 				String targetChannelName = ((CommandStop) cmd).getTargetChannelName();
-				if(targetChannelName == null)
+				if(targetChannelName == null) {
+					for(ACBBAudio audio : currentAudioMap.values()) {
+						ACBBMusicDataContainer.cancelRequest(audio.musicName);
+					}
 					currentAudioMap.clear();
-				else
-					currentAudioMap.remove(targetChannelName);
+				} else {
+					ACBBAudio audio = currentAudioMap.remove(targetChannelName);
+					ACBBMusicDataContainer.cancelRequest(audio.musicName);
+				}
 				audioCommandList.removeFirst();
 				continue;
 			} else if(cmd instanceof CommandVolume) {
@@ -99,7 +104,8 @@ public class ACBBChannel {
 		
 		for(String removeAudio : removeAudioList) {
 			System.out.println("remove: " + removeAudio);
-			currentAudioMap.remove(removeAudio);
+			ACBBAudio audio = currentAudioMap.remove(removeAudio);
+			ACBBMusicDataContainer.cancelRequest(audio.musicName);
 		}
 		
 //		for(int i = 0; i < data.length; i++) {
@@ -115,18 +121,24 @@ public class ACBBChannel {
 	
 	public void stop() {
 		clearCommand();
-		currentAudioMap.clear();;
+		for(ACBBAudio audio : currentAudioMap.values()) {
+			ACBBMusicDataContainer.cancelRequest(audio.musicName);
+		}
+		currentAudioMap.clear();
 	}
 	
 	public void clearCommand() {
-		audioCommandList.clear();
+		AudioCommand cmd;
+		while((cmd = audioCommandList.pollFirst()) != null) {
+			if(cmd instanceof CommandPlay) {
+				ACBBMusicDataContainer.cancelRequest(((CommandPlay) cmd).getName());
+			}
+		}
 	}
 	
 	public void addCommand(AudioCommand cmd) {
 		if(cmd instanceof CommandPlay) {
-			if(!ACBBMusicDataContainer.isMusicLoaded(((CommandPlay) cmd).getName())) {
-				ACBBMusicDataContainer.loadMusic(((CommandPlay) cmd).getName());
-			}
+			ACBBMusicDataContainer.requestMusic(((CommandPlay) cmd).getName());
 		}
 		audioCommandList.add(cmd);
 	}

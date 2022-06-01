@@ -5,6 +5,7 @@ import com.kuiprux.animalcrossingbgmbot.music.audiocommand.CommandVolume;
 
 public class ACBBAudio {
 	
+	public String musicName;
 	public int nextIndex = 0;
 	public ACBBMusicData musicData;
 	
@@ -22,6 +23,7 @@ public class ACBBAudio {
 	}
 	
 	public ACBBAudio(String musicName, ACBBAudio audioToSync, boolean shouldLoop) {
+		this.musicName = musicName;
 		//System.out.println(musicName + "::" + shouldLoop);
 		musicData = ACBBMusicDataContainer.musicDataMap.get(musicName);
 		this.shouldLoop = shouldLoop;

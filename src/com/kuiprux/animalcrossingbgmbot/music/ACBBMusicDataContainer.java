@@ -12,6 +12,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import com.kuiprux.animalcrossingbgmbot.GoogleCloudHandler;
+import com.kuiprux.animalcrossingbgmbot.music.audiocommand.CommandPlay;
 
 public class ACBBMusicDataContainer {
 	
@@ -19,6 +20,7 @@ public class ACBBMusicDataContainer {
 	public static final String EXTENSION_REGEX = "\\.[^.]*$";
 
 	public static Map<String, ACBBMusicData> musicDataMap = new HashMap<>();
+	public static Map<String, Integer> musicRequestCounter = new HashMap<>();
 	
 	public static void loadBgmMusic(String titleName, String weatherName, int currentHour) {
 		loadMusic(GoogleCloudHandler.getBgmFileName(titleName, weatherName, currentHour));
@@ -61,11 +63,54 @@ public class ACBBMusicDataContainer {
 		}
 	}
 	
-	public static void loadMusics(String prefix) {
+	public static void loadDefaultMusics(String prefix) {
 		List<String> names = GoogleCloudHandler.getActualNames(prefix);
 		
 		for(String name : names) {
 			loadMusic(name, GoogleCloudHandler.getFileWithName(name));
+			String[] name1 = name.split("\\.");
+			if(name1.length > 1) {
+				musicRequestCounter.put(name1[0], -1);
+				System.out.println("D " + name1[0] + " counter: " + -1);
+			}
+		}
+	}
+
+	public static void requestMusic(String name) {
+		if(!isMusicLoaded(name)) {
+			loadMusic(name);
+		}
+		
+		Integer counter = musicRequestCounter.get(name);
+		System.out.println("R " + name + " counter: " + counter);
+		
+		if(counter == null)
+			musicRequestCounter.put(name, counter = 0);
+		
+		if(counter < 0)
+			return;
+		
+		musicRequestCounter.put(name, ++counter);
+		
+		System.out.println("Incremented " + name + " counter: " + counter);
+	}
+
+	public static void cancelRequest(String name) {
+		Integer counter = musicRequestCounter.get(name);
+		System.out.println("C " + name + " counter: " + counter);
+		
+		if(counter == null)
+			musicRequestCounter.put(name, counter = 0);
+		
+		if(counter < 0)
+			return;
+		
+		musicRequestCounter.put(name, --counter);
+		
+		System.out.println("Decremented " + name + " counter: " + counter);
+		if(counter == 0) {
+			System.out.println(name + " is removed");
+			musicDataMap.remove(name);
 		}
 	}
 	

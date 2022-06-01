@@ -57,7 +57,7 @@ public class GuildDataApplier {
 	}
 
 	public void play() {
-		mixer.acbbChannelList.get(0).audioCommandList.add(new CommandPlay("testmusic", "test"));
+		//mixer.acbbChannelList.get(0).audioCommandList.add(new CommandPlay("testmusic", "test"));
 		mixer.setPlaying(true);
 		//System.out.println("gmm");
 		

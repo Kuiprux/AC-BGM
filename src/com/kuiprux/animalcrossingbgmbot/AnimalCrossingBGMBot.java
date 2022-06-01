@@ -21,8 +21,8 @@ public class AnimalCrossingBGMBot {
 		GoogleCloudHandler.init(env.get("PROJECT_ID"), env.get("BUCKET_NAME"));
 		Util.APP_ID = env.get("APP_ID");
 		
-		ACBBMusicDataContainer.loadMusics("weather-sound/");
-		ACBBMusicDataContainer.loadMusics("city-folk/bell/");
+		ACBBMusicDataContainer.loadDefaultMusics("weather-sound/");
+		ACBBMusicDataContainer.loadDefaultMusics("city-folk/bell/");
 		
 	    JDABuilder builder = JDABuilder.createDefault(env.get("JDA_TOKEN"));
 	    builder.setActivity(Activity.playing("ACNH"));
