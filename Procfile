@@ -1,0 +1,1 @@
+worker: java -jar target/animal-crossing-bgm-bot-0.0.1-shaded.jar
